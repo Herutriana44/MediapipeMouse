@@ -10,8 +10,8 @@ mp_drawing = mp.solutions.drawing_utils
 # Inisialisasi kamera
 cap = cv2.VideoCapture(0)
 sw, sh = pyautogui.size()
-cap.set(cv2.CAP_PROP_FRAME_WIDTH,sw+500)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT,sh+500)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH,sw)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT,sh)
 
 def get_hand_center(hand_landmarks):
     x_coords = [landmark.x for landmark in hand_landmarks.landmark]
@@ -24,6 +24,8 @@ while cap.isOpened():
     ret, frame = cap.read()
     if not ret:
         continue
+
+    frame = cv2.flip(frame, 1)
 
     # Konversi gambar ke RGB
     image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -41,7 +43,7 @@ while cap.isOpened():
             center_x, center_y = get_hand_center(hand_landmarks)
             center_x_px = int(center_x * image_width)
             center_y_px = int(center_y * image_height)
-            pyautogui.moveTo(center_x_px, center_y_px)
+            pyautogui.moveTo(center_x_px*1.5, center_y_px*1.5)
             cv2.circle(frame, (center_x_px, center_y_px), 5, (255, 0, 0), -1)
             print(f"Posisi tengah tangan: X={center_x_px}, Y={center_y_px}")
 
